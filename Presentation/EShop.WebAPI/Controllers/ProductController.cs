@@ -1,67 +1,49 @@
 ﻿using EShop.Application.DTOS;
-using Microsoft.AspNetCore.Mvc;
 using EShop.Application.DTOS.Product;
-using EShop.Application.Repositories;
-using EShop.Domain.Entities.Concretes;
-
-namespace EShop.WebAPI.Controllers;
+using EShop.Application.Services.Abstracts;
+using Microsoft.AspNetCore.Mvc;
 
 [Route("api/[controller]")]
 [ApiController]
 public class ProductController : ControllerBase
 {
-    private readonly IProductReadRepository _productReadRepository;
-    private readonly IProductWriteRepository _productWriteRepository;
+    private readonly IProductService _productService;
 
-    public ProductController(IProductReadRepository productReadRepository, IProductWriteRepository productWriteRepository)
+    public ProductController(IProductService productService)
     {
-        _productReadRepository = productReadRepository;
-        _productWriteRepository = productWriteRepository;
+        _productService = productService;
     }
 
-    [HttpGet("GetAll")]
+    [HttpGet]
     public async Task<IActionResult> GetAll([FromQuery] PaginationDTO model)
+        => Ok(await _productService.GetAllAsync(model));
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(int id)
+        => Ok(await _productService.GetByIdAsync(id));
+
+    [HttpGet("category/{categoryId}")]
+    public async Task<IActionResult> GetByCategory(int categoryId)
+        => Ok(await _productService.GetProductsByCategoryId(categoryId));
+
+    [HttpPost]
+    public async Task<IActionResult> Add(AddProductDto model)
     {
-        var products = await _productReadRepository.GetAllAsync();
-
-        var productWithPagionation = products
-                                     .Skip(model.Page * model.PageSize)
-                                     .Take(model.PageSize)
-                                     .ToList();
-
-        var allProductDto = productWithPagionation
-                            .Select(x => new ProductDTO()
-                            {
-                                Id = x.Id,
-                                Name = x.Name,
-                                Description = x.Description,
-                                Price = x.Price,
-                                Stock = x.Stock,
-                                CategoryName = x.Category.Name
-                            });
-
-        return Ok(allProductDto);
+        var result = await _productService.AddAsync(model);
+        return result.Success ? Ok(result) : BadRequest(result);
     }
 
-    [HttpPost("AddProduct")]
-    public async Task<IActionResult> AddProduct([FromBody] AddProductDto model)
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(int id, ProductDto model)
     {
-        if (!ModelState.IsValid)
-            return BadRequest(model);
+        var result = await _productService.UpdateAsync(id, model);
+        return result.Success ? Ok(result) : BadRequest(result);
+    }
 
-
-        var newProduct = new Product()
-        {
-            Name = model.Name,
-            Description = model.Description,
-            Price = model.Price,
-            Stock = model.Stock,
-            CategoryId = model.CategoryId
-        };
-
-        await _productWriteRepository.AddAsync(newProduct);
-        await _productWriteRepository.SaveChangeAsync();
-
-        return Ok(newProduct);
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var result = await _productService.DeleteAsync(id);
+        return result.Success ? Ok(result) : BadRequest(result);
     }
 }

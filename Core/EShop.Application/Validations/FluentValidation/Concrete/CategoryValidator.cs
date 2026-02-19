@@ -1,4 +1,6 @@
-﻿using EShop.Application.Validations.FluentValidation.Abstract;
+﻿using EShop.Application.DTOS.Category;
+using EShop.Application.Mappers.DTOS.Category;
+using EShop.Application.Validations.FluentValidation.Abstract;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
@@ -8,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace EShop.Application.Validations.FluentValidation.Concrete;
 
-public class CategoryValidator : GenericValidator<Domain.Entities.Concretes.Category>
+public class CategoryValidator : GenericValidator<AddCategoryDto>
 {
     public CategoryValidator()
     {

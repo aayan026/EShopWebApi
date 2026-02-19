@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EShop.Application.Mappers.DTOS.Order;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,5 @@ public class CustomerDto
     public string Surname { get; set; }
     public string Email { get; set; }
 
-    public List<EShop.Domain.Entities.Concretes.Order>? Orders { get; set; }
-
+    public List<OrderDto>? Orders { get; set; }
 }

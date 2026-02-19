@@ -13,7 +13,6 @@ namespace EShop.Application.Mappers.DTOS.Order
         public DateTime OrderDate { get; set; }
         public string? OrderNote { get; set; }
         public decimal? Total { get; set; }
-
-        public CustomerDto Customer { get; set; } 
+        public int CustomerId { get; set; }
     }
 }

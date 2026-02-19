@@ -1,4 +1,5 @@
-﻿using EShop.Application.Validations.FluentValidation.Abstract;
+﻿using EShop.Application.DTOS.Product;
+using EShop.Application.Validations.FluentValidation.Abstract;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace EShop.Application.Validations.FluentValidation.Concrete;
 
-public class ProductValidator: GenericValidator<Domain.Entities.Concretes.Product>
+public class ProductValidator: GenericValidator<AddProductDto>
 {
     public ProductValidator()
     {

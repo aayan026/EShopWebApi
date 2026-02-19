@@ -22,7 +22,7 @@ namespace EShop.Application.Mappers
             CreateMap<AddProductDto, Product>();
             CreateMap<CreateOrderDto, Order>();
             CreateMap<CreateCustomerDto, Customer>();
-
+            //birinci yazdigimiz class ikinci yazdigimiz classa map olunur
             //get
             CreateMap<Category, CategoryDto>();
             CreateMap<Product, ProductDto>();

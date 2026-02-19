@@ -1,4 +1,5 @@
-﻿using EShop.Application.Validations.FluentValidation.Abstract;
+﻿using EShop.Application.Mappers.DTOS.Customer;
+using EShop.Application.Validations.FluentValidation.Abstract;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace EShop.Application.Validations.FluentValidation.Concrete
 {
-    public class CustomerValidator :GenericValidator<Domain.Entities.Concretes.Customer>
+    public class CustomerValidator :AbstractValidator<CreateCustomerDto>
     {
         public CustomerValidator()
         {

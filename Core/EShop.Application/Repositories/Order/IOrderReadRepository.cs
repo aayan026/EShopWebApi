@@ -5,4 +5,6 @@ namespace EShop.Application.Repositories;
 
 public interface IOrderReadRepository : IReadGenericRepository<Order>
 {
+    Task<List<Order>> GetOrderWithCustomer();
+
 }

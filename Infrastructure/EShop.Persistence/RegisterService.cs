@@ -6,6 +6,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using AutoMapper;
 using EShop.Application.Mappers;
+using EShop.Persistence.Services.Concretes;
+using EShop.Application.Services.Abstracts;
 namespace EShop.Persistence;
 
 public static class RegisterService
@@ -44,10 +46,17 @@ public static class RegisterService
 
         services.AddAutoMapper(typeof(MappingProfile));
 
+
     }
 
     private static void AddServiceExtention(IServiceCollection services)
     {
         // 
+        services.AddScoped<IProductService, ProductService>();
+        services.AddScoped<ICategoryService, CategoryService>();
+        services.AddScoped<ICustomerService, CustomerService>();
+            services.AddScoped<IOrderService, OrderService>();
+
+
     }
 }

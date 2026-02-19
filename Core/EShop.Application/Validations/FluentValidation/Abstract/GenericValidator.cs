@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EShop.Application.Validations.FluentValidation.Abstract;
 
-public class GenericValidator<T> : AbstractValidator<T> where T : IBaseEntity
+public class GenericValidator<T> : AbstractValidator<T> 
 {
 
 }
