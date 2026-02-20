@@ -4,6 +4,7 @@ using EShop.Application.DTOS;
 using EShop.Application.Mappers.DTOS.Order;
 using EShop.Application.Repositories;
 using EShop.Application.Services.Abstracts;
+using EShop.Application.Validations.FluentValidation.Concrete;
 using EShop.Domain.Entities.Concretes;
 using EShop.Persistence.Repositories;
 
@@ -51,7 +52,19 @@ public class OrderService : IOrderService
             Total = model.Total,
             CustomerId = model.CustomerId
         };
+        var validation = new OrderValidator();
 
+        var result = validation.Validate(model);
+
+        if (!result.IsValid)
+        {
+            return new Response<bool>
+            {
+                Data = false,
+                Success = false,
+                Message = string.Join(", ", result.Errors.Select(e => e.ErrorMessage))
+            };
+        }
         await _orderWriteRepository.AddAsync(newOrder);
         await _orderWriteRepository.SaveChangeAsync();
 
@@ -106,14 +119,14 @@ public class OrderService : IOrderService
         return _mapper.Map<OrderDto>(order);
     }
 
-    public async Task<List<OrderDto>> GetOrderWithCustomer()
+    public async Task<IEnumerable<OrderDto>> GetOrderWithCustomer()
     {
         var orders = await _orderReadRepository.GetOrderWithCustomer();
 
         return _mapper.Map<List<OrderDto>>(orders);
     }
 
-    public async Task<Response<bool>> UpdateAsync(int id, OrderDto model)
+    public async Task<Response<bool>> UpdateAsync(int id, CreateOrderDto model)
     {
         var order = await _orderReadRepository.GetByIdAsync(id);
 
@@ -135,6 +148,20 @@ public class OrderService : IOrderService
         order.OrderNote = model.OrderNote;
         order.Total = model.Total;
         order.CustomerId = model.CustomerId;
+
+        var validation = new OrderValidator();
+
+        var result = validation.Validate(model);
+
+        if (!result.IsValid)
+        {
+            return new Response<bool>
+            {
+                Data = false,
+                Success=false,
+                Message= string.Join(", ", result.Errors.Select(e => e.ErrorMessage))
+            };
+        }
 
         await _orderWriteRepository.Update(order);
         await _orderWriteRepository.SaveChangeAsync();

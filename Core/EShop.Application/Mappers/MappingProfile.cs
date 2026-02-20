@@ -28,6 +28,7 @@ namespace EShop.Application.Mappers
             CreateMap<Product, ProductDto>();
             CreateMap<Order, OrderDto>();
             CreateMap<Customer, CustomerDto>();
+
         }
     }
 }

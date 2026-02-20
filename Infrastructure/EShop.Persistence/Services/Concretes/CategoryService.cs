@@ -5,6 +5,7 @@ using EShop.Application.DTOS.Category;
 using EShop.Application.Mappers.DTOS.Category;
 using EShop.Application.Repositories;
 using EShop.Application.Services.Abstracts;
+using EShop.Application.Validations.FluentValidation.Concrete;
 using EShop.Domain.Entities.Concretes;
 
 namespace EShop.Persistence.Services.Concretes;
@@ -41,6 +42,20 @@ public class CategoryService : ICategoryService
             Name = model.Name,
             Description = model.Description
         };
+
+        var validator = new CategoryValidator();
+
+        var result = validator.Validate(model);
+
+        if (!result.IsValid)
+        {
+            return new Response<bool>
+            {
+                Data = false,
+                Success = false,
+                Message = string.Join(", ", result.Errors.Select(e => e.ErrorMessage))
+            };
+        }
 
         await _categoryWriteRepository.AddAsync(newCategory);
         await _categoryWriteRepository.SaveChangeAsync();
@@ -103,7 +118,7 @@ public class CategoryService : ICategoryService
         return _mapper.Map<List<CategoryDto>>(categories);
     }
 
-    public async Task<Response<bool>> UpdateAsync(int id, CategoryDto model)
+    public async Task<Response<bool>> UpdateAsync(int id, AddCategoryDto model)
     {
         var category = await _categoryReadRepository.GetByIdAsync(id);
 
@@ -119,6 +134,21 @@ public class CategoryService : ICategoryService
 
         category.Name = model.Name;
         category.Description = model.Description;
+
+        var validator = new CategoryValidator();
+
+        var result = validator.Validate(model);
+
+        if (!result.IsValid)
+        {
+            return new Response<bool>
+            {
+                Data = false,
+                Success = false,
+                Message = string.Join(", ", result.Errors.Select(e => e.ErrorMessage))
+            };
+        }
+
 
         await _categoryWriteRepository.Update(category);
         await _categoryWriteRepository.SaveChangeAsync();

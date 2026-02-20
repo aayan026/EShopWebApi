@@ -19,5 +19,5 @@ public interface ICategoryService
     
     Task<Response<bool>> AddAsync(AddCategoryDto model);
     Task<Response<bool>> DeleteAsync(int id); 
-    Task<Response<bool>> UpdateAsync(int id, CategoryDto model);
+    Task<Response<bool>> UpdateAsync(int id, AddCategoryDto model);
 }

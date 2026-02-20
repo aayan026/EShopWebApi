@@ -17,6 +17,6 @@ namespace EShop.Application.Services.Abstracts
 
         Task<Response<bool>> AddAsync(AddProductDto model);
         Task<Response<bool>> DeleteAsync(int id);
-        Task<Response<bool>> UpdateAsync(int id, ProductDto model);
+        Task<Response<bool>> UpdateAsync(int id, AddProductDto model);
     }
 }

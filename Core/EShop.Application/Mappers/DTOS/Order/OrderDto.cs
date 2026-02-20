@@ -14,5 +14,6 @@ namespace EShop.Application.Mappers.DTOS.Order
         public string? OrderNote { get; set; }
         public decimal? Total { get; set; }
         public int CustomerId { get; set; }
+        public string CustomerName { get; set; }
     }
 }

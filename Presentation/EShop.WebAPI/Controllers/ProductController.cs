@@ -34,7 +34,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, ProductDto model)
+    public async Task<IActionResult> Update(int id, AddProductDto model)
     {
         var result = await _productService.UpdateAsync(id, model);
         return result.Success ? Ok(result) : BadRequest(result);

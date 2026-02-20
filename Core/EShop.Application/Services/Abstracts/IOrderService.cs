@@ -13,11 +13,11 @@ namespace EShop.Application.Services.Abstracts
     public interface IOrderService
     {
         Task<IEnumerable<OrderDto>> GetAllAsync(PaginationDTO model);
-        Task<List<OrderDto>> GetOrderWithCustomer();
+        Task<IEnumerable<OrderDto>> GetOrderWithCustomer();
         Task<OrderDto> GetByIdAsync(int id);
 
         Task<Response<bool>> AddAsync(CreateOrderDto model);
         Task<Response<bool>> DeleteAsync(int id);
-        Task<Response<bool>> UpdateAsync(int id, OrderDto model);
+        Task<Response<bool>> UpdateAsync(int id, CreateOrderDto model);
     }
 }

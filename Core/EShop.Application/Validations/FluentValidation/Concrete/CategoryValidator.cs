@@ -1,12 +1,7 @@
-﻿using EShop.Application.DTOS.Category;
-using EShop.Application.Mappers.DTOS.Category;
+﻿using FluentValidation;
+using EShop.Application.DTOS.Category;
 using EShop.Application.Validations.FluentValidation.Abstract;
-using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace EShop.Application.Validations.FluentValidation.Concrete;
 
@@ -19,8 +14,8 @@ public class CategoryValidator : GenericValidator<AddCategoryDto>
         .MaximumLength(100).WithMessage("Category Name 100 simvoldan uzun ola bilməz");
 
         RuleFor(x => x.Description)
+             .NotEmpty().WithMessage("Description Name boş ola bilməz")
             .MaximumLength(500).WithMessage("Description 500 simvoldan uzun ola bilməz");
     }
-
 }
 

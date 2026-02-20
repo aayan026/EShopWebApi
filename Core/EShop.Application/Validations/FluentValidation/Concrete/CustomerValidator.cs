@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace EShop.Application.Validations.FluentValidation.Concrete
 {
-    public class CustomerValidator :AbstractValidator<CreateCustomerDto>
+    public class CustomerValidator :GenericValidator<CreateCustomerDto>
     {
         public CustomerValidator()
         {

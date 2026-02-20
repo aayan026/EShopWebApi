@@ -35,7 +35,7 @@ public class CategoryController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, CategoryDto model)
+    public async Task<IActionResult> Update(int id, AddCategoryDto model)
     {
         var result = await _categoryService.UpdateAsync(id, model);
         return result.Success ? Ok(result) : BadRequest(result);

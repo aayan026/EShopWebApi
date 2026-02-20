@@ -4,6 +4,7 @@ using EShop.Application.DTOS;
 using EShop.Application.DTOS.Product;
 using EShop.Application.Repositories;
 using EShop.Application.Services.Abstracts;
+using EShop.Application.Validations.FluentValidation.Concrete;
 using EShop.Domain.Entities.Concretes;
 using EShop.Persistence.Repositories;
 using System;
@@ -57,6 +58,20 @@ namespace EShop.Persistence.Services.Concretes
                 Stock = model.Stock,
                 CategoryId = model.CategoryId
             };
+            var validation = new ProductValidator();
+
+            var result = validation.Validate(model);
+
+            if (!result.IsValid)
+            {
+                return new Response<bool>
+                {
+                    Data = false,
+                    Success = false,
+                    Message = string.Join(", ", result.Errors.Select(e => e.ErrorMessage))
+                };
+            }
+
             //butun servisler ancaq dto qaytarmalidir user terefe entity gondermey olmaz.
             //ona gore ki usere lazim olmayan ve ya gizli datalar ola biler. dto vasitesi ile sadece lazim olanlari gondeririy
             var dto = _mapper.Map<ProductDto>(newProduct);//new producti dto-ya cevir
@@ -121,7 +136,7 @@ namespace EShop.Persistence.Services.Concretes
             return dto;
         }
 
-        public async Task<Response<bool>> UpdateAsync(int id, ProductDto model)
+        public async Task<Response<bool>> UpdateAsync(int id, AddProductDto model)
         {
             var product = await _productReadRepository.GetByIdAsync(id);
 
@@ -134,7 +149,7 @@ namespace EShop.Persistence.Services.Concretes
                     Message = $"bu id-de product tapilmadi"
                 };
             }
-            var customer = await _categoryReadRepository.GetByIdAsync(model.categoryId);
+            var customer = await _categoryReadRepository.GetByIdAsync(model.CategoryId);
             if (customer == null)
                 return new Response<bool> { Success = false, Message = "category tapılmadı" };
 
@@ -143,11 +158,24 @@ namespace EShop.Persistence.Services.Concretes
             product.Description = model.Description;
             product.Price = model.Price;
             product.Stock = model.Stock;
-            product.CategoryId = model.categoryId;
+            product.CategoryId = model.CategoryId;
 
+            var validation = new ProductValidator();
+
+            var result = validation.Validate(model);
+
+            if (!result.IsValid)
+            {
+                return new Response<bool>
+                {
+                    Data = false,
+                    Success = false,
+                    Message = string.Join(", ", result.Errors.Select(e => e.ErrorMessage))
+                };
+            }
             //auto mapper ile:
-           // var productWithMapper=_mapper.Map<Product>(model); bele yazmaq duzgun deyil cunki burda auto mapper yeni bir product yaradir update etmir.
-           // yenisini yaradir deye update etmek istediyimiz productin id-si ile ust uste dusmur. ona gore manual yazmaq daha duzgundur 
+            // var productWithMapper=_mapper.Map<Product>(model); bele yazmaq duzgun deyil cunki burda auto mapper yeni bir product yaradir update etmir.
+            // yenisini yaradir deye update etmek istediyimiz productin id-si ile ust uste dusmur. ona gore manual yazmaq daha duzgundur 
 
             await _productWriteRepository.Update(product);
             await _productWriteRepository.SaveChangeAsync();
